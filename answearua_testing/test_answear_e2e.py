@@ -1,6 +1,6 @@
-from selene import have, be
+from selene import have
 from selene.support.shared import browser
-from selene.support.shared.jquery_style import s, ss
+from selene.support.shared.jquery_style import s
 
 def test_e2e():
     browser.open('https://answear.ua/')
@@ -60,10 +60,12 @@ def test_e2e():
     s('#_username').set_value('makemef4mous')
     s('#_password').set_value('Des19961975')
     s('[class="btn xs-12 l-12 btn--primary btn--fluid"]').click()
+    error_msg = s(
+        '#root > main > div > div > div.l-9.xs-12 > div:nth-child(2) > div.xs-12.l-5.LoginPanelTemplate__mobileContent__sR6AZ.LoginPanelTemplate__activeMobileContent__ZNENx > form > div.dynamicField.DynamicField__dynamicField__J84AZ.undefined > span.fieldError.FieldError__error__ZiVkd')
+    assert error_msg.should(have.text('Будь ласка, введіть електронну адресу правильно'))
     #-invalid password
     s('#_username').set_value('makemef4mous@gmail.com')
-    s('#_password').set_value('%$&_')
+    s('#password').set_value('%$&')
     s('[class="btn xs-12 l-12 btn--primary btn--fluid"]').click()
-    #-forgot password
-    s('[class="btn btn--noPadding"]').click()
-    s('[class="btn btn--primary btn--fluid PasswordRecoveryStepForm__buttonsSubmit__R4PBf"]').click()
+    error_msg = s('div > ul > li > div > p')
+    assert error_msg.should(have.text('Неправильна електронна пошта або пароль'))
